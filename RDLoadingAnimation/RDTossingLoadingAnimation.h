@@ -15,6 +15,10 @@
 - (instancetype) initOnView:(UIView *)view leftImage:(UIImage*)leftImage rightImage:(UIImage*)rightImage;
 - (instancetype) initOnView:(UIView *)view leftImage:(UIImage *)leftImage rightImage:(UIImage *)rightImage tossingColor:(UIColor*)tossingColor;
 
+- (void) show;
+- (void) hide;
++ (UIImage*)resizeImage:(UIImage*)originalImage newSize:(CGSize)newSize;
+
 @property (strong, nonatomic) UIView *view;
 @property (strong, nonatomic) UIImage *leftImage;
 @property (strong, nonatomic) UIImage *rightImage;
