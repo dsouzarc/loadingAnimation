@@ -7,8 +7,11 @@
 //
 
 #import "TestingViewController.h"
+#import "RDTossingLoadingAnimation.h"
 
 @interface TestingViewController ()
+
+@property (strong, nonatomic) RDTossingLoadingAnimation *tossingLoadingAnimation;
 
 @end
 
@@ -16,7 +19,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    
+    UIImage *leftImage = [UIImage imageNamed:@"facebook_f_icon.png"];
+    leftImage = [RDTossingLoadingAnimation resizeImage:leftImage newSize:CGSizeMake(100, 100)];
+    
+    UIImage *rightImage = [UIImage imageNamed:@"white_iphone.png"];
+    rightImage = [RDTossingLoadingAnimation resizeImage:rightImage newSize:CGSizeMake(100, 210)];
+    
+    self.tossingLoadingAnimation = [[RDTossingLoadingAnimation alloc] initOnView:self.view leftImage:leftImage rightImage:rightImage tossingColor:[UIColor blueColor]];
+     [self.tossingLoadingAnimation show];
+    
 }
 
 - (void)didReceiveMemoryWarning {
