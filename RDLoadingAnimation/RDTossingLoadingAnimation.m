@@ -89,8 +89,36 @@
         self.rightImageView.center = CGPointMake(imageCenterX, CGRectGetMidY(self.view.bounds));
     }
     
-    [self.view addSubview:self.leftImageView];
-    [self.view addSubview:self.rightImageView];
+    //[self.view addSubview:self.leftImageView];
+    //[self.view addSubview:self.rightImageView];
+    
+    UIBezierPath *parabolaPath = [UIBezierPath bezierPath];
+    [parabolaPath moveToPoint:CGPointMake(0, [self calculateParabolaY:0])];
+    
+    for(int i = 0; i < (int) self.view.frame.size.width; i++) {
+        [parabolaPath addLineToPoint:CGPointMake(i, [self calculateParabolaY:i])];
+    }
+    
+    [parabolaPath closePath];
+    
+    CAShapeLayer *shapeForPath = [[CAShapeLayer alloc] init];
+    [shapeForPath setPath:parabolaPath.CGPath];
+    shapeForPath.borderWidth = 5;
+    shapeForPath.borderColor = [[UIColor blueColor] CGColor];
+    
+    [[self.view layer] addSublayer:shapeForPath];
+}
+
+- (CGFloat) calculateParabolaY:(CGFloat)x
+{
+    //Parabola: y = (ax + b)^2 + c
+    CGFloat c = self.view.frame.size.height * 1/8;
+    CGFloat b = self.view.frame.size.width / 2;
+    
+    CGFloat y = pow(((0.9 * x) - b), 2) + c;
+    
+    NSLog(@"%f\t%f", x, y);
+    return y;
 }
 
 - (void) hide
