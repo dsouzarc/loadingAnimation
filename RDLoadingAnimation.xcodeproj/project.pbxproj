@@ -14,6 +14,8 @@
 		94D17D511B1A5C09006AF7A7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94D17D501B1A5C09006AF7A7 /* Images.xcassets */; };
 		94D17D541B1A5C09006AF7A7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94D17D521B1A5C09006AF7A7 /* LaunchScreen.xib */; };
 		94D17D601B1A5C09006AF7A7 /* RDLoadingAnimationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D17D5F1B1A5C09006AF7A7 /* RDLoadingAnimationTests.m */; };
+		94D17D6A1B1A5C26006AF7A7 /* facebook_f_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 94D17D691B1A5C26006AF7A7 /* facebook_f_icon.png */; };
+		94D17D721B1A5DF8006AF7A7 /* white_iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 94D17D711B1A5DF8006AF7A7 /* white_iphone.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,8 @@
 		94D17D591B1A5C09006AF7A7 /* RDLoadingAnimationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RDLoadingAnimationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		94D17D5E1B1A5C09006AF7A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		94D17D5F1B1A5C09006AF7A7 /* RDLoadingAnimationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RDLoadingAnimationTests.m; sourceTree = "<group>"; };
+		94D17D691B1A5C26006AF7A7 /* facebook_f_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook_f_icon.png; sourceTree = "<group>"; };
+		94D17D711B1A5DF8006AF7A7 /* white_iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white_iphone.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +85,8 @@
 		94D17D421B1A5C09006AF7A7 /* RDLoadingAnimation */ = {
 			isa = PBXGroup;
 			children = (
+				94D17D691B1A5C26006AF7A7 /* facebook_f_icon.png */,
+				94D17D711B1A5DF8006AF7A7 /* white_iphone.png */,
 				94D17D471B1A5C09006AF7A7 /* AppDelegate.h */,
 				94D17D481B1A5C09006AF7A7 /* AppDelegate.m */,
 				94D17D4A1B1A5C09006AF7A7 /* ViewController.h */,
@@ -200,7 +206,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				94D17D4F1B1A5C09006AF7A7 /* Main.storyboard in Resources */,
+				94D17D6A1B1A5C26006AF7A7 /* facebook_f_icon.png in Resources */,
 				94D17D541B1A5C09006AF7A7 /* LaunchScreen.xib in Resources */,
+				94D17D721B1A5DF8006AF7A7 /* white_iphone.png in Resources */,
 				94D17D511B1A5C09006AF7A7 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
