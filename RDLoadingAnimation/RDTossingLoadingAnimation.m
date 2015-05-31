@@ -10,8 +10,11 @@
 
 @interface RDTossingLoadingAnimation ()
 
+@property (strong, nonatomic) UIView *view;
+
 @property (strong, nonatomic) UIImageView *leftImageView;
 @property (strong, nonatomic) UIImageView *rightImageView;
+@property (strong, nonatomic) UIBezierPath *parabolaPath;
 
 @property CGFloat viewCenterY;
 @property CGFloat viewWidth;
@@ -24,6 +27,10 @@
 @end
 
 @implementation RDTossingLoadingAnimation
+
+#define START_ANGLE 3.14159265359
+#define END_ANGLE 0.0
+#define BEZIER_DISTANCE 5
 
 
 /****************************/
@@ -71,6 +78,7 @@
 
 - (void) show
 {
+    //If the view hasn't been shown before, initialize the ImageViews
     if(!self.leftImageView) {
         CGFloat imageCenterX = self.imageSpaceFromEnd + (self.leftImage.size.width / 2);
         CGRect imageDimensions = CGRectMake(imageCenterX, self.viewCenterY, self.leftImage.size.width, self.leftImage.size.height);
@@ -89,27 +97,39 @@
         self.rightImageView.center = CGPointMake(imageCenterX, CGRectGetMidY(self.view.bounds));
     }
     
+    //Draw them on the screen
     [self.view addSubview:self.leftImageView];
     [self.view addSubview:self.rightImageView];
     
-    UIBezierPath *parabolaPath = [UIBezierPath bezierPath];
-    
-    CGPoint theCenter = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height * 1/4);
-    CGFloat innerRadius = (self.rightImageView.center.x - self.leftImageView.center.x)/2;
-    CGFloat outerRadius = innerRadius + 5;
-    CGFloat startAngle = M_PI;
-    CGFloat endAngle = 0;
-    [parabolaPath addArcWithCenter:theCenter radius:innerRadius startAngle:startAngle endAngle:endAngle clockwise:YES];
-    [parabolaPath addLineToPoint:CGPointMake(self.rightImageView.center.x, self.rightImageView.frame.origin.y)];
-    [parabolaPath addLineToPoint:CGPointMake(self.rightImageView.center.x + 5, self.rightImageView.frame.origin.y)];
-    [parabolaPath addArcWithCenter:theCenter radius:outerRadius startAngle:endAngle endAngle:startAngle clockwise:NO];
-    [parabolaPath addLineToPoint:CGPointMake(self.leftImageView.center.x, self.leftImageView.frame.origin.y)];
-    [parabolaPath addLineToPoint:CGPointMake(self.leftImageView.center.x + 5, self.leftImageView.frame.origin.y)];
-
-    [parabolaPath closePath];
+    //For the UIBezierPath
+    if(!self.parabolaPath) {
+        self.parabolaPath = [UIBezierPath bezierPath];
+        
+        CGPoint theCenter = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height * 1/4);
+        CGFloat innerRadius = (self.rightImageView.center.x - self.leftImageView.center.x)/2;
+        CGFloat outerRadius = innerRadius + BEZIER_DISTANCE;
+        
+        [self.parabolaPath addArcWithCenter:theCenter radius:innerRadius
+                                 startAngle:START_ANGLE endAngle:END_ANGLE clockwise:YES];
+        
+        [self.parabolaPath addLineToPoint:CGPointMake(self.rightImageView.center.x,
+                                                      self.rightImageView.frame.origin.y)];
+        [self.parabolaPath addLineToPoint:CGPointMake(self.rightImageView.center.x + BEZIER_DISTANCE,
+                                                      self.rightImageView.frame.origin.y)];
+        
+        [self.parabolaPath addArcWithCenter:theCenter radius:outerRadius
+                                 startAngle:END_ANGLE endAngle:START_ANGLE clockwise:NO];
+        
+        [self.parabolaPath addLineToPoint:CGPointMake(self.leftImageView.center.x,
+                                                      self.leftImageView.frame.origin.y)];
+        [self.parabolaPath addLineToPoint:CGPointMake(self.leftImageView.center.x + BEZIER_DISTANCE,
+                                                      self.leftImageView.frame.origin.y)];
+        
+        [self.parabolaPath closePath];
+    }
     
     CAShapeLayer *shapeForPath = [[CAShapeLayer alloc] init];
-    [shapeForPath setPath:parabolaPath.CGPath];
+    [shapeForPath setPath:self.parabolaPath.CGPath];
     
     [[self.view layer] addSublayer:shapeForPath];
 }

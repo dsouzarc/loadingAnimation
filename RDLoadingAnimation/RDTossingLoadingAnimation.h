@@ -19,7 +19,6 @@
 - (void) hide;
 + (UIImage*)resizeImage:(UIImage*)originalImage newSize:(CGSize)newSize;
 
-@property (strong, nonatomic) UIView *view;
 @property (strong, nonatomic) UIImage *leftImage;
 @property (strong, nonatomic) UIImage *rightImage;
 @property (strong, nonatomic) UIColor *tossingColor;
