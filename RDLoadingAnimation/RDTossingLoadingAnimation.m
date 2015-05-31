@@ -46,6 +46,7 @@
         self.leftImage = leftImage;
         self.rightImage = rightImage;
         self.tossingColor = tossingColor;
+        self.tossingParabolaLineColor = [UIColor blackColor];
         
         self.numBalls = 8;
         self.showTossingParabola = YES;
@@ -128,10 +129,14 @@
         [self.parabolaPath closePath];
     }
     
-    CAShapeLayer *shapeForPath = [[CAShapeLayer alloc] init];
-    [shapeForPath setPath:self.parabolaPath.CGPath];
-    
-    [[self.view layer] addSublayer:shapeForPath];
+    if(self.showTossingParabola) {
+        CAShapeLayer *shapeForPath = [[CAShapeLayer alloc] init];
+        
+        [shapeForPath setPath:self.parabolaPath.CGPath];
+        [shapeForPath setFillColor:[self.tossingParabolaLineColor CGColor]];
+        
+        [[self.view layer] addSublayer:shapeForPath];
+    }
 }
 
 - (void) hide

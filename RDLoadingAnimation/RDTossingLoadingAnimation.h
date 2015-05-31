@@ -22,6 +22,7 @@
 @property (strong, nonatomic) UIImage *leftImage;
 @property (strong, nonatomic) UIImage *rightImage;
 @property (strong, nonatomic) UIColor *tossingColor;
+@property (strong, nonatomic) UIColor *tossingParabolaLineColor;
 
 @property NSInteger numBalls;
 @property BOOL showTossingParabola;
