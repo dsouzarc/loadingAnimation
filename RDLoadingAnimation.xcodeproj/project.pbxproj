@@ -16,9 +16,9 @@
 		94D17D601B1A5C09006AF7A7 /* RDLoadingAnimationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D17D5F1B1A5C09006AF7A7 /* RDLoadingAnimationTests.m */; };
 		94D17D6A1B1A5C26006AF7A7 /* facebook_f_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 94D17D691B1A5C26006AF7A7 /* facebook_f_icon.png */; };
 		94D17D721B1A5DF8006AF7A7 /* white_iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 94D17D711B1A5DF8006AF7A7 /* white_iphone.png */; };
-		94D17D751B1A5EE0006AF7A7 /* RDTossingLoadingAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D17D741B1A5EE0006AF7A7 /* RDTossingLoadingAnimation.m */; };
 		94D17D791B1A619C006AF7A7 /* TestingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D17D771B1A619C006AF7A7 /* TestingViewController.m */; };
 		94D17D7A1B1A619C006AF7A7 /* TestingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94D17D781B1A619C006AF7A7 /* TestingViewController.xib */; };
+		94FEC68F1B1D2619003DA629 /* RDTwoImageLoadingAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FEC68E1B1D2619003DA629 /* RDTwoImageLoadingAnimation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,11 +47,11 @@
 		94D17D5F1B1A5C09006AF7A7 /* RDLoadingAnimationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RDLoadingAnimationTests.m; sourceTree = "<group>"; };
 		94D17D691B1A5C26006AF7A7 /* facebook_f_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook_f_icon.png; sourceTree = "<group>"; };
 		94D17D711B1A5DF8006AF7A7 /* white_iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white_iphone.png; sourceTree = "<group>"; };
-		94D17D731B1A5EE0006AF7A7 /* RDTossingLoadingAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDTossingLoadingAnimation.h; sourceTree = "<group>"; };
-		94D17D741B1A5EE0006AF7A7 /* RDTossingLoadingAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDTossingLoadingAnimation.m; sourceTree = "<group>"; };
 		94D17D761B1A619C006AF7A7 /* TestingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestingViewController.h; sourceTree = "<group>"; };
 		94D17D771B1A619C006AF7A7 /* TestingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestingViewController.m; sourceTree = "<group>"; };
 		94D17D781B1A619C006AF7A7 /* TestingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TestingViewController.xib; sourceTree = "<group>"; };
+		94FEC68D1B1D2619003DA629 /* RDTwoImageLoadingAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDTwoImageLoadingAnimation.h; sourceTree = "<group>"; };
+		94FEC68E1B1D2619003DA629 /* RDTwoImageLoadingAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDTwoImageLoadingAnimation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,8 +96,8 @@
 				94D17D761B1A619C006AF7A7 /* TestingViewController.h */,
 				94D17D771B1A619C006AF7A7 /* TestingViewController.m */,
 				94D17D781B1A619C006AF7A7 /* TestingViewController.xib */,
-				94D17D731B1A5EE0006AF7A7 /* RDTossingLoadingAnimation.h */,
-				94D17D741B1A5EE0006AF7A7 /* RDTossingLoadingAnimation.m */,
+				94FEC68D1B1D2619003DA629 /* RDTwoImageLoadingAnimation.h */,
+				94FEC68E1B1D2619003DA629 /* RDTwoImageLoadingAnimation.m */,
 				94D17D691B1A5C26006AF7A7 /* facebook_f_icon.png */,
 				94D17D711B1A5DF8006AF7A7 /* white_iphone.png */,
 				94D17D471B1A5C09006AF7A7 /* AppDelegate.h */,
@@ -241,8 +241,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94FEC68F1B1D2619003DA629 /* RDTwoImageLoadingAnimation.m in Sources */,
 				94D17D4C1B1A5C09006AF7A7 /* ViewController.m in Sources */,
-				94D17D751B1A5EE0006AF7A7 /* RDTossingLoadingAnimation.m in Sources */,
 				94D17D491B1A5C09006AF7A7 /* AppDelegate.m in Sources */,
 				94D17D461B1A5C09006AF7A7 /* main.m in Sources */,
 				94D17D791B1A619C006AF7A7 /* TestingViewController.m in Sources */,
@@ -440,6 +440,7 @@
 				94D17D651B1A5C09006AF7A7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		94D17D661B1A5C09006AF7A7 /* Build configuration list for PBXNativeTarget "RDLoadingAnimationTests" */ = {
 			isa = XCConfigurationList;
@@ -448,6 +449,7 @@
 				94D17D681B1A5C09006AF7A7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
