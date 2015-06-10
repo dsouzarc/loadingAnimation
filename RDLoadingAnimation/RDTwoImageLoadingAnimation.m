@@ -18,9 +18,8 @@
 @property (strong, nonatomic) UIImage *leftImage;
 @property (strong, nonatomic) UIImage *rightImage;
 
-@property (strong, nonatomic) UIBezierPath *parabolaPath;
-@property (strong, nonatomic) NSMutableArray *bezierPathPoints;
 @property (strong, nonatomic) NSMutableArray *animationPathPoints;
+@property (strong, nonatomic) NSMutableArray *allPathPoints;
 
 @property CGFloat ONE_TWELFTH;
 
@@ -42,6 +41,10 @@
 @property CGFloat viewWidth;
 
 @property CGFloat imageSpaceFromEnd;
+
+@property CGFloat parabolaH;
+@property CGFloat parabolaA;
+@property CGFloat parabolaK;
 
 
 @end
@@ -71,6 +74,7 @@
     if(self) {
         
         self.animationPathPoints = [[NSMutableArray alloc] init];
+        self.allPathPoints = [[NSMutableArray alloc] init];
         
         self.view = view;
         self.leftImage = leftImage;
@@ -80,7 +84,7 @@
         
         self.showLoaderFunction = NO;
         self.loaderFunctionColor = [UIColor blackColor];
-        self.loaderFunctionThickness = 5.0;
+        self.loaderFunctionThickness = 3;
         
         self.numBalls = 5;
         self.ballRadius = 5;
@@ -130,45 +134,64 @@
     [self.view addSubview:self.leftImageView];
     [self.view addSubview:self.rightImageView];
     
-    self.loadingAnimationType = LOADING_ANIMATION_LINE;
+    self.parabolaH = (((self.rightImageView.frame.origin.x + self.rightImageView.frame.size.width) - self.leftImageView.frame.origin.x) / 2) + self.leftImageView.frame.origin.x;
+    self.parabolaA = 0.015;
+    self.parabolaK = self.view.frame.size.height * 1/16;
+    
     
     switch (self.loadingAnimationType) {
         case LOADING_ANIMATION_LINE:
-            NSLog(@"Here1\t%f", self.rightImageView.bounds.origin.x);
-            for(float i = self.leftImageView.frame.origin.x + self.leftImageView.frame.size.width; i < self.rightImageView.frame.origin.x; i += 10) {
+            for(float i = self.leftImageView.frame.origin.x + self.leftImageView.frame.size.width; i < self.rightImageView.frame.origin.x; i += 1) {
                 CGPoint point = CGPointMake(i, self.screenHeight / 2);
-                NSLog(@"%f\t%f\t%lu", point.x, point.y, self.animationPathPoints.count);
-                [self.animationPathPoints addObject:[NSValue valueWithCGPoint:point]];
+                if((int)i % 10 == 0) {
+                    [self.animationPathPoints addObject:[NSValue valueWithCGPoint:point]];
+                }
+                [self.allPathPoints addObject:[NSValue valueWithCGPoint:point]];
             }
             
             break;
         case LOADING_ANIMATION_PARABOLA:
-            for(float i = self.leftImageView.frame.origin.x; i < self.rightImageView.center.x; i+= 5) {
+            for(float i = self.leftImageView.frame.origin.x; i < self.rightImageView.frame.origin.x + self.rightImageView.frame.size.width; i+= 0.1) {
                 CGPoint point = CGPointMake(i, [self parabolaY:i]);
-                NSLog(@"%f\t%f\t%lu", point.x, point.y, self.animationPathPoints.count);
-                [self.animationPathPoints addObject:[NSValue valueWithCGPoint:point]];
+                
+                //If the point is above the left image view, add it
+                if((i <= self.screenWidth/2 && point.y <= self.leftImageView.frame.origin.y) || (i > self.screenWidth/2 && point.y < self.rightImageView.frame.origin.y)) {
+                    if((int)i % 20 == 0) {
+                        [self.animationPathPoints addObject:[NSValue valueWithCGPoint:point]];
+                    }
+                    [self.allPathPoints addObject:[NSValue valueWithCGPoint:point]];
+                }
             }
             break;
     }
+    self.showLoaderFunction = YES;
+    if(self.showLoaderFunction) {
+        for(int i = 0; i < self.allPathPoints.count; i++) {
+            CGPoint point = [self.allPathPoints[i] CGPointValue];
+            UIView *circleView = [self circleViewAtPoint:point radius:self.loaderFunctionThickness color:self.loaderFunctionColor];
+            [self.view addSubview:circleView];
+        }
+    }
     
     for(int i = 0; i < self.animationPathPoints.count; i++) {
-        
         CGPoint point = [self.animationPathPoints[i] CGPointValue];
-        UIView *circleView = [[UIView alloc] initWithFrame:CGRectMake(point.x, point.y, self.ballRadius, self.ballRadius)];
-        circleView.layer.cornerRadius = self.ballRadius / 2;
-        circleView.backgroundColor = self.loaderFunctionColor;
-        [self.view addSubview:circleView];
+        UIView *circleView = [self circleViewAtPoint:point radius:self.ballRadius color:self.ballColor];
+        //[self.view addSubview:circleView];
     }
+}
+
+- (UIView*) circleViewAtPoint:(CGPoint)point radius:(CGFloat)radius color:(UIColor*)color
+{
+    UIView *circleView = [[UIView alloc] initWithFrame:CGRectMake(point.x, point.y, radius, radius)];
+    circleView.layer.cornerRadius = radius / 2;
+    circleView.backgroundColor = color;
+    return circleView;
 }
 
 - (CGFloat) parabolaY:(CGFloat)x
 {
     //y = a(x - h)^2 + k
-    CGFloat a = 0.015;
-    CGFloat h = self.view.center.x;
-    CGFloat k = self.view.frame.size.height * 1/14;
-    
-    CGFloat y = a * pow(x - h, 2) + k;
+    CGFloat y = self.parabolaA * pow(x - self.parabolaH, 2) + self.parabolaK;
     
     return y;
 }
