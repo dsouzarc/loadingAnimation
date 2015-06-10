@@ -70,6 +70,8 @@
     
     if(self) {
         
+        self.animationPathPoints = [[NSMutableArray alloc] init];
+        
         self.view = view;
         self.leftImage = leftImage;
         self.rightImage = rightImage;
@@ -127,6 +129,36 @@
     //Draw them on the screen
     [self.view addSubview:self.leftImageView];
     [self.view addSubview:self.rightImageView];
+    
+    self.loadingAnimationType = LOADING_ANIMATION_LINE;
+    
+    switch (self.loadingAnimationType) {
+        case LOADING_ANIMATION_LINE:
+            NSLog(@"Here1\t%f", self.rightImageView.bounds.origin.x);
+            for(float i = self.leftImageView.frame.origin.x + self.leftImageView.frame.size.width; i < self.rightImageView.frame.origin.x; i += 10) {
+                CGPoint point = CGPointMake(i, self.screenHeight / 2);
+                NSLog(@"%f\t%f\t%lu", point.x, point.y, self.animationPathPoints.count);
+                [self.animationPathPoints addObject:[NSValue valueWithCGPoint:point]];
+            }
+            
+            break;
+        case LOADING_ANIMATION_PARABOLA:
+            for(float i = self.leftImageView.frame.origin.x; i < self.rightImageView.center.x; i+= 5) {
+                CGPoint point = CGPointMake(i, [self parabolaY:i]);
+                NSLog(@"%f\t%f\t%lu", point.x, point.y, self.animationPathPoints.count);
+                [self.animationPathPoints addObject:[NSValue valueWithCGPoint:point]];
+            }
+            break;
+    }
+    
+    for(int i = 0; i < self.animationPathPoints.count; i++) {
+        
+        CGPoint point = [self.animationPathPoints[i] CGPointValue];
+        UIView *circleView = [[UIView alloc] initWithFrame:CGRectMake(point.x, point.y, self.ballRadius, self.ballRadius)];
+        circleView.layer.cornerRadius = self.ballRadius / 2;
+        circleView.backgroundColor = self.loaderFunctionColor;
+        [self.view addSubview:circleView];
+    }
 }
 
 - (CGFloat) parabolaY:(CGFloat)x
