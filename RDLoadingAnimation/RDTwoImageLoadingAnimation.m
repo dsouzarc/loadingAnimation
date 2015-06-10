@@ -142,69 +142,59 @@
     
     switch (self.loadingAnimationType) {
         case LOADING_ANIMATION_LINE:
-            for(float i = self.leftImageView.frame.origin.x + self.leftImageView.frame.size.width; i < self.rightImageView.frame.origin.x; i += 1) {
-                CGPoint point = CGPointMake(i, self.screenHeight / 2);
-                [self.allPathPoints addObject:[NSValue valueWithCGPoint:point]];
-            }
+            self.loadingStartX = self.leftImageView.frame.origin.x + self.leftImageView.frame.size.width;
+            self.loadingEndX = self.rightImageView.frame.origin.x;
+            self.loadingIncrement = 1;
             
             break;
         case LOADING_ANIMATION_PARABOLA:
-            for(float i = self.leftImageView.frame.origin.x; i < self.rightImageView.frame.origin.x + self.rightImageView.frame.size.width; i+= 0.1) {
+            
+            self.loadingIncrement += 0.1;
+            for(float i = self.leftImageView.frame.origin.x; i < self.view.center.x; i+= self.loadingIncrement) {
                 CGPoint point = CGPointMake(i, [self parabolaY:i]);
                 
-                //If the point is above the left image view, add it
-                if((i <= self.screenWidth/2 && point.y <= self.leftImageView.frame.origin.y) || (i > self.screenWidth/2 && point.y < self.rightImageView.frame.origin.y)) {
-                    [self.allPathPoints addObject:[NSValue valueWithCGPoint:point]];
+                if(point.y <= self.leftImageView.frame.origin.y) {
+                    self.loadingStartX = i;
+                    i = self.view.center.x;
+                    //break;
+                }
+            }
+            
+            for(float i = self.rightImageView.frame.origin.x; i < self.rightImageView.frame.origin.x + self.rightImageView.frame.size.width; i+= self.loadingIncrement) {
+                CGPoint point = CGPointMake(i, [self parabolaY:i]);
+                if(point.y >= self.rightImageView.frame.origin.y) {
+                    self.loadingEndX = i;
+                    i = self.view.bounds.size.width;
                 }
             }
             break;
     }
+    
     self.showLoaderFunction = YES;
     if(self.showLoaderFunction) {
-        for(int i = 0; i < self.allPathPoints.count; i++) {
-            CGPoint point = [self.allPathPoints[i] CGPointValue];
+        for(CGFloat x = self.loadingStartX; x <= self.loadingEndX; x+= self.loadingIncrement) {
+            CGPoint point = CGPointMake(x, [self parabolaY:x]);
             UIView *circleView = [self circleViewAtPoint:point radius:self.loaderFunctionThickness color:self.loaderFunctionColor];
             [self.view addSubview:circleView];
         }
     }
     
     __block UIView *circleView;
-    __block NSInteger index = 0;
+    __block CGFloat currentX = self.loadingStartX;
     id addCircle = ^{
         [circleView removeFromSuperview];
-        circleView = [self circleViewAtPoint:[self.allPathPoints[index] CGPointValue] radius:self.ballRadius color:self.ballColor];
+        circleView = [self circleViewAtPoint:CGPointMake(currentX, [self parabolaY:currentX]) radius:self.ballRadius color:self.ballColor];
         [self.view addSubview:circleView];
-        index+= 10;
+        currentX += self.loadingIncrement;
         
-        if(index >= self.allPathPoints.count) {
-            index = 0;
+        if(currentX >= self.loadingEndX) {
+            currentX = self.loadingStartX;
         }
     };
     
-    NSTimer* timer = [NSTimer timerWithTimeInterval:0.2f target:addCircle selector:@selector(invoke) userInfo:nil repeats:YES];
+    NSTimer* timer = [NSTimer timerWithTimeInterval:0.02f target:addCircle selector:@selector(invoke) userInfo:nil repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
-    
-    
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        //load your data here.
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIView *circleView = [self circleViewAtPoint:[self.allPathPoints[0] CGPointValue] radius:self.ballRadius color:self.ballColor];
-            [self.view addSubview:circleView];
-            
-            for(int i = 0; i < self.allPathPoints.count; i+= self.ballRadius) {
-                //[NSThread sleepForTimeInterval:1.0f];
-                //[circleView removeFromSuperview];
-                NSLog(@"Here");
-                circleView = [self circleViewAtPoint:[self.allPathPoints[i] CGPointValue] radius:8 color:self.ballColor];
-                //[self.view addSubview:circleView];
-            }
-        });
-    });
-    
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
 
-        
-    }];
 }
 
 - (UIView*) circleViewAtPoint:(CGPoint)point radius:(CGFloat)radius color:(UIColor*)color
