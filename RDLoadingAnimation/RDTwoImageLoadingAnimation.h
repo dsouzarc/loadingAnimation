@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-typedef enum ANIMATION_TYPE{LINE, PARABOLA}ANIMATION_TYPE;
+typedef enum ANIMATION_TYPE{LOADING_ANIMATION_LINE, LOADING_ANIMATION_PARABOLA}ANIMATION_TYPE;
 
 @interface RDTwoImageLoadingAnimation : NSObject
 

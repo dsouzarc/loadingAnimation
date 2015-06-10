@@ -22,11 +22,24 @@
 @property (strong, nonatomic) NSMutableArray *bezierPathPoints;
 @property (strong, nonatomic) NSMutableArray *animationPathPoints;
 
+@property CGFloat ONE_TWELFTH;
+
+@property CGFloat screenWidth;
+@property CGFloat screenHeight;
+
+@property CGFloat leftImageWidth;
+@property CGFloat leftImageHeight;
+@property CGPoint leftImageCenter;
+
+@property CGFloat rightImageWidth;
+@property CGFloat rightImageHeight;
+@property CGPoint rightImageCenter;
+
+@property CGFloat spaceFromEnd;
+@property CGFloat spaceBetweenImages;
+
 @property CGFloat viewCenterY;
 @property CGFloat viewWidth;
-
-@property CGPoint leftImageCenter;
-@property CGPoint rightImageCenter;
 
 @property CGFloat imageSpaceFromEnd;
 
@@ -47,7 +60,7 @@
 
 - (instancetype) initOnView:(UIView *)view leftImage:(UIImage *)leftImage rightImage:(UIImage *)rightImage
 {
-    self = [self initOnView:view leftImage:leftImage rightImage:rightImage ballColor:[UIColor blueColor] animationType:PARABOLA];
+    self = [self initOnView:view leftImage:leftImage rightImage:rightImage ballColor:[UIColor blueColor] animationType:LOADING_ANIMATION_PARABOLA];
     return self;
 }
 
@@ -75,25 +88,40 @@
     
     return self;
 }
+
 - (void) show
 {
+    self.screenWidth = self.view.frame.size.width;
+    self.screenHeight = self.view.frame.size.height;
+    
+    self.ONE_TWELFTH = self.screenWidth * 1/12;
+    
+    NSLog(@"1/12: %f", self.ONE_TWELFTH);
+    self.spaceFromEnd = self.ONE_TWELFTH;
+    self.spaceBetweenImages = self.ONE_TWELFTH * 4;
+    
+    self.leftImageWidth = self.leftImage.size.width < self.ONE_TWELFTH * 3 ? self.leftImage.size.width : self.ONE_TWELFTH * 3;
+    self.leftImageHeight = self.leftImage.size.height / (self.leftImage.size.width / self.leftImageWidth);
+    self.leftImageCenter = CGPointMake(self.spaceFromEnd + self.leftImageWidth / 2, self.screenHeight / 2);
+    
+    self.rightImageWidth = self.rightImage.size.width < self.ONE_TWELFTH * 3 ? self.rightImage.size.width : self.ONE_TWELFTH * 3;
+    self.rightImageHeight = self.leftImage.size.height / (self.rightImage.size.width / self.rightImageWidth);
+    self.rightImageCenter = CGPointMake(self.screenWidth - self.spaceFromEnd - (self.rightImageWidth / 2), self.screenHeight/ 2);
+    
     //If the view hasn't been shown before, initialize the ImageViews
     if(!self.leftImageView) {
-        CGFloat imageCenterX = self.imageSpaceFromEnd + (self.leftImage.size.width / 2);
-        CGRect imageDimensions = CGRectMake(imageCenterX, self.viewCenterY, self.leftImage.size.width, self.leftImage.size.height);
+        CGRect imageDimensions = CGRectMake(self.leftImageCenter.x, self.leftImageCenter.y, self.leftImageWidth, self.leftImageHeight);
         
         self.leftImageView = [[UIImageView alloc] initWithFrame:imageDimensions];
         [self.leftImageView setImage:self.leftImage];
-        self.leftImageView.center = CGPointMake(imageCenterX, CGRectGetMidY(self.view.bounds));
+        self.leftImageView.center = self.leftImageCenter;
     }
-    
+
     if(!self.rightImageView) {
-        CGFloat imageCenterX = self.viewWidth - (self.imageSpaceFromEnd + self.rightImage.size.width / 2);
-        CGRect imageDimensions = CGRectMake(imageCenterX, self.viewCenterY, self.rightImage.size.width, self.rightImage.size.height);
-        
+        CGRect imageDimensions = CGRectMake(self.rightImageCenter.x, self.rightImageCenter.y, self.leftImageWidth, self.rightImageHeight);
         self.rightImageView = [[UIImageView alloc] initWithFrame:imageDimensions];
         [self.rightImageView setImage:self.rightImage];
-        self.rightImageView.center = CGPointMake(imageCenterX, CGRectGetMidY(self.view.bounds));
+        self.rightImageView.center = self.rightImageCenter;
     }
     
     //Draw them on the screen
