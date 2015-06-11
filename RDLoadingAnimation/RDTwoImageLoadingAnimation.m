@@ -139,22 +139,21 @@
     
     
     switch (self.loadingAnimationType) {
+            
         case LOADING_ANIMATION_LINE:
             self.loadingStartX = self.leftImageView.frame.origin.x + self.leftImageView.frame.size.width;
             self.loadingEndX = self.rightImageView.frame.origin.x;
             self.loadingIncrement = 1;
-            
             break;
-        case LOADING_ANIMATION_PARABOLA:
             
+        case LOADING_ANIMATION_PARABOLA:
             self.loadingIncrement += 0.1;
             for(float i = self.leftImageView.frame.origin.x; i < self.view.center.x; i+= self.loadingIncrement) {
                 CGPoint point = CGPointMake(i, [self parabolaY:i]);
                 
                 if(point.y <= self.leftImageView.frame.origin.y) {
                     self.loadingStartX = i;
-                    i = self.view.center.x;
-                    //break;
+                    break;
                 }
             }
             
@@ -162,7 +161,7 @@
                 CGPoint point = CGPointMake(i, [self parabolaY:i]);
                 if(point.y >= self.rightImageView.frame.origin.y) {
                     self.loadingEndX = i;
-                    i = self.view.bounds.size.width;
+                    break;
                 }
             }
             break;
