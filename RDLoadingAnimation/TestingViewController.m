@@ -26,7 +26,7 @@
     UIImage *rightImage = [UIImage imageNamed:@"white_iphone.png"];
     //rightImage = [RDTwoImageLoadingAnimation resizeImage:rightImage newSize:CGSizeMake(100, 210)];
     
-    self.tossingLoadingAnimation = [[RDTwoImageLoadingAnimation alloc] initOnView:self.view leftImage:leftImage rightImage:rightImage ballColor:[UIColor blueColor] animationType:LOADING_ANIMATION_PARABOLA];
+    self.tossingLoadingAnimation = [[RDTwoImageLoadingAnimation alloc] initOnView:self.view leftImage:leftImage rightImage:rightImage ballColor:[UIColor blueColor] animationType:LOADING_ANIMATION_LINE];
     self.tossingLoadingAnimation.ballRadius = 8;
     self.tossingLoadingAnimation.loaderFunctionThickness = 2;
     [self.tossingLoadingAnimation show];
