@@ -99,6 +99,7 @@
 {
     self.screenWidth = self.view.frame.size.width;
     self.screenHeight = self.view.frame.size.height;
+    self.viewCenterY = self.screenHeight / 2;
     
     self.ONE_TWELFTH = self.screenWidth * 1/12;
     self.spaceFromEnd = self.ONE_TWELFTH;
@@ -136,7 +137,6 @@
     self.parabolaA = 0.015;
     self.parabolaK = self.view.frame.size.height * 1/16;
     
-    
     switch (self.loadingAnimationType) {
             
         case LOADING_ANIMATION_LINE:
@@ -146,10 +146,9 @@
             break;
             
         case LOADING_ANIMATION_PARABOLA:
-            self.loadingIncrement += 0.1;
+            self.loadingIncrement = 1;
             for(float i = self.leftImageView.frame.origin.x; i < self.view.center.x; i+= self.loadingIncrement) {
                 CGPoint point = CGPointMake(i, [self parabolaY:i]);
-                
                 if(point.y <= self.leftImageView.frame.origin.y) {
                     self.loadingStartX = i;
                     break;
@@ -169,17 +168,16 @@
     self.showLoaderFunction = YES;
     if(self.showLoaderFunction) {
         for(CGFloat x = self.loadingStartX; x <= self.loadingEndX; x+= self.loadingIncrement) {
-            CGPoint point = CGPointMake(x, [self parabolaY:x]);
-            UIView *circleView = [self circleViewAtPoint:point radius:self.loaderFunctionThickness color:self.loaderFunctionColor];
+            CGPoint point = CGPointMake(x, [self functionY:x]);
+            UIView *circleView = [self circleViewAtPoint:point radius:self.loaderFunctionThickness*2 color:self.loaderFunctionColor];
             [self.view addSubview:circleView];
         }
     }
     
-    self.ballRadius = 10;
     self.circleViews = [[NSMutableArray alloc] init];
     __block NSInteger counter = 0;
-
-    [self.circleViews addObject:[self circleViewAtPoint:CGPointMake(self.loadingStartX, [self parabolaY:self.loadingStartX])
+    
+    [self.circleViews addObject:[self circleViewAtPoint:CGPointMake(self.loadingStartX, [self functionY:self.loadingStartX])
                                             radius:self.ballRadius color:self.ballColor]];
     id addCircle = ^{
         
@@ -189,19 +187,31 @@
             [circleView removeFromSuperview];
             
             currentX += self.loadingIncrement;
-            circleView.frame = CGRectMake(currentX, [self parabolaY:currentX] - 8, self.ballRadius, self.ballRadius);
+            circleView.frame = CGRectMake(currentX, [self functionY:currentX], self.ballRadius, self.ballRadius);
+            circleView.center = CGPointMake(currentX, [self functionY:currentX]);
             [self.view addSubview:circleView];
             
-            if((int)currentX % 100 == 0) {
-                UIView *newCircle = [self circleViewAtPoint:CGPointMake(self.loadingStartX, [self parabolaY:self.loadingStartX])
+            if((int)currentX % 100 == 0 && i == 0) {
+                UIView *newCircle = [self circleViewAtPoint:CGPointMake(self.loadingStartX, [self functionY:self.loadingStartX])
                                                      radius:self.ballRadius color:self.ballColor];
                 [self.circleViews addObject:newCircle];
             }
             
-            if(currentX >= self.view.center.x && circleView.center.y >= self.rightImageView.frame.origin.y) {
-                [circleView removeFromSuperview];
-                [self.circleViews removeObjectAtIndex:i];
-                i--;
+            switch(self.loadingAnimationType) {
+                case LOADING_ANIMATION_LINE:
+                    if(currentX >= self.rightImageView.frame.origin.x) {
+                        [circleView removeFromSuperview];
+                        [self.circleViews removeObjectAtIndex:i];
+                        i--;
+                    }
+                    break;
+                case LOADING_ANIMATION_PARABOLA:
+                    if(currentX >= self.view.center.x && circleView.center.y >= self.rightImageView.frame.origin.y) {
+                        [circleView removeFromSuperview];
+                        [self.circleViews removeObjectAtIndex:i];
+                        i--;
+                    }
+                    break;
             }
         }
     };
@@ -209,6 +219,16 @@
     self.loadingAnimationTimer = [NSTimer timerWithTimeInterval:0.03f target:addCircle selector:@selector(invoke) userInfo:nil repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:self.loadingAnimationTimer forMode:NSRunLoopCommonModes];
     
+}
+
+- (CGFloat) functionY:(CGFloat)xCoordinate
+{
+    switch (self.loadingAnimationType) {
+        case LOADING_ANIMATION_PARABOLA:
+            return [self parabolaY:xCoordinate];
+        case LOADING_ANIMATION_LINE:
+            return self.viewCenterY;
+    }
 }
 
 - (UIView*) circleViewAtPoint:(CGPoint)point radius:(CGFloat)radius color:(UIColor*)color
