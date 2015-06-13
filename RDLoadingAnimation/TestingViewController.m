@@ -28,7 +28,7 @@
     
     self.tossingLoadingAnimation = [[RDTwoImageLoadingAnimation alloc] initOnView:self.view leftImage:leftImage rightImage:rightImage ballColor:[UIColor blueColor] animationType:LOADING_ANIMATION_PARABOLA];
     self.tossingLoadingAnimation.ballRadius = 8;
-    self.tossingLoadingAnimation.loaderFunctionThickness = 5;
+    self.tossingLoadingAnimation.loaderFunctionThickness = 2;
     [self.tossingLoadingAnimation show];
                                     
 }

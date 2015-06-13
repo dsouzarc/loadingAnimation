@@ -167,7 +167,7 @@
     
     self.showLoaderFunction = YES;
     if(self.showLoaderFunction) {
-        for(CGFloat x = self.loadingStartX; x <= self.loadingEndX; x+= self.loadingIncrement) {
+        for(CGFloat x = self.loadingStartX; x <= self.loadingEndX; x+= 0.1) {
             CGPoint point = CGPointMake(x, [self functionY:x]);
             UIView *circleView = [self circleViewAtPoint:point radius:self.loaderFunctionThickness*2 color:self.loaderFunctionColor];
             [self.view addSubview:circleView];
@@ -191,7 +191,7 @@
             circleView.center = CGPointMake(currentX, [self functionY:currentX]);
             [self.view addSubview:circleView];
             
-            if((int)currentX % 100 == 0 && i == 0) {
+            if((int)currentX % 50 == 0 && i == 0) {
                 UIView *newCircle = [self circleViewAtPoint:CGPointMake(self.loadingStartX, [self functionY:self.loadingStartX])
                                                      radius:self.ballRadius color:self.ballColor];
                 [self.circleViews addObject:newCircle];
